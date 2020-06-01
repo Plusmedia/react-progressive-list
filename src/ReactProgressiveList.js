@@ -18,6 +18,7 @@ import times from 'lodash/times';
 type Props = {
   className?: string,
   idleAmount?: number,
+  scrollBuffer?: number,
   initialAmount?: number,
   isActive?: boolean,
   progressiveAmount?: number,
@@ -66,7 +67,7 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
   }
 
   handleScroll = e => {
-    const { rowCount, progressiveAmount, useWindowScroll } = this.props;
+    const { rowCount, progressiveAmount, useWindowScroll, scrollBuffer = 0 } = this.props;
     const { numRenderRows } = this.state;
     let top, height, scrollHeight, reachedLimit;
     if (useWindowScroll) {
@@ -74,12 +75,12 @@ class ReactProgressiveList extends React.PureComponent<Props, State> {
       top = boundingClientRect.top;
       height = boundingClientRect.height;
       scrollHeight = window.innerHeight;
-      reachedLimit = top + height < scrollHeight;
+      reachedLimit = top + height < scrollHeight + scrollBuffer;
     } else {
       top = e.target.scrollTop;
       height = e.target.offsetHeight;
       scrollHeight = e.target.scrollHeight;
-      reachedLimit = top + height >= scrollHeight;
+      reachedLimit = top + height + scrollBuffer >= scrollHeight;
     }
     if (reachedLimit && numRenderRows !== rowCount && !this.isLoading) {
       this.loadMore(progressiveAmount);
