@@ -176,7 +176,9 @@ var _initialiseProps = function _initialiseProps() {
     var _props2 = _this5.props,
         rowCount = _props2.rowCount,
         progressiveAmount = _props2.progressiveAmount,
-        useWindowScroll = _props2.useWindowScroll;
+        useWindowScroll = _props2.useWindowScroll,
+        _props2$scrollBuffer = _props2.scrollBuffer,
+        scrollBuffer = _props2$scrollBuffer === undefined ? 0 : _props2$scrollBuffer;
     var numRenderRows = _this5.state.numRenderRows;
 
     var top = void 0,
@@ -188,12 +190,12 @@ var _initialiseProps = function _initialiseProps() {
       top = boundingClientRect.top;
       height = boundingClientRect.height;
       scrollHeight = window.innerHeight;
-      reachedLimit = top + height < scrollHeight;
+      reachedLimit = top + height < scrollHeight + scrollBuffer;
     } else {
       top = e.target.scrollTop;
       height = e.target.offsetHeight;
       scrollHeight = e.target.scrollHeight;
-      reachedLimit = top + height >= scrollHeight;
+      reachedLimit = top + height + scrollBuffer >= scrollHeight;
     }
     if (reachedLimit && numRenderRows !== rowCount && !_this5.isLoading) {
       _this5.loadMore(progressiveAmount);
@@ -218,6 +220,7 @@ var _initialiseProps = function _initialiseProps() {
 ReactProgressiveList.propTypes = {
   className: require('prop-types').string,
   idleAmount: require('prop-types').number,
+  scrollBuffer: require('prop-types').number,
   initialAmount: require('prop-types').number,
   isActive: require('prop-types').bool,
   progressiveAmount: require('prop-types').number,
